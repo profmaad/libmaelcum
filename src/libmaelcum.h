@@ -21,4 +21,7 @@
 
 struct maelcum_ctx;
 
+struct maelcum_ctx* maelcum_init(void);
+int maelcum_load_key(struct maelcum_ctx* ctx, const char *filename);
+
 # endif /*LIBMAELCUM_H*/
