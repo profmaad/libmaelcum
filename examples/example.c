@@ -16,14 +16,14 @@ int main(int argc, char **argv)
 	ctx = maelcum_init();
 	if(!ctx)
 	{
-		printf("maelcum_init failed");
+		printf("maelcum_init failed\n");
 		return 1;
 	}
 
 	int success = maelcum_load_key(ctx, keyfile);
 	if(success != 0)
 	{
-		printf("maelcum_load_key('%s') failed: %i", keyfile, success);
+		printf("maelcum_load_key('%s') failed: %i\n", keyfile, success);
 		return success;
 	}
 
