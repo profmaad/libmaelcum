@@ -26,6 +26,6 @@ AC_TYPE_UINT8_T
 AC_FUNC_MALLOC
 
 AC_CONFIG_FILES([Makefile
-		 src/Makefile])
+		 maelcum/Makefile])
 
 AC_OUTPUT
