@@ -13,7 +13,11 @@ It uses libnettle for its crypto and uses RSA keys in nettle's S-Expression form
 
 ## Build
 
-Just use the autotools trinity:
+If you cloned the git repository, first do
+
+	./autogen.sh
+
+Now, just use the autotools trinity:
 
      ./configure && make && make install
 
