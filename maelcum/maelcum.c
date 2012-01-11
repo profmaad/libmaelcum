@@ -22,7 +22,7 @@
 
 # include <nettle/rsa.h>
 
-# include "libmaelcum.h"
+# include "maelcum.h"
 
 struct maelcum_ctx
 {
@@ -105,9 +105,6 @@ int maelcum_load_key(struct maelcum_ctx* ctx, const char *filename)
 		if(buffer) { free(buffer); }
 		return error;
 	}
-	
-	rsa_public_key_clear(&(ctx->public_key));
-	rsa_private_key_clear(&(ctx->private_key));
 
 	error = rsa_keypair_from_sexp(&(ctx->public_key), &(ctx->private_key), 0, buffer_size, buffer);
 	if(error != 1)

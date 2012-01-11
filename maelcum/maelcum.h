@@ -16,12 +16,12 @@
  * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-# ifndef LIBMAELCUM_H
-# define LIBMAELCUM_H
+# ifndef MAELCUM_H
+# define MAELCUM_H
 
 struct maelcum_ctx;
 
 struct maelcum_ctx* maelcum_init(void);
 int maelcum_load_key(struct maelcum_ctx* ctx, const char *filename);
 
-# endif /*LIBMAELCUM_H*/
+# endif /*MAELCUM_H*/
