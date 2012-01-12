@@ -22,6 +22,7 @@
 # include <string.h>
 
 # include <nettle/rsa.h>
+# include <nettle/base64.h>
 
 # include "../config.h"
 
@@ -375,4 +376,49 @@ char* maelcum_create_policy(const char *resource, long date_less_than, long date
 	}
 
 	return policy;
+}
+
+char* maelcum_base64_encode(const uint8_t *src, unsigned int length)
+{
+	struct base64_encode_ctx ctx;
+	uint8_t *result = NULL;
+
+	result = (uint8_t*)malloc(BASE64_ENCODE_LENGTH(length)+BASE64_ENCODE_FINAL_LENGTH+1);
+	if(!result) { return NULL; }
+
+	base64_encode_init(&ctx);
+
+	unsigned int bytes_written = base64_encode_update(&ctx, result, length, src);
+	bytes_written += base64_encode_final(&ctx, result+bytes_written);
+	*(result+bytes_written) = '\0';
+
+	return result;
+}
+uint8_t* maelcum_base64_decode(const char *src, unsigned int *result_length)
+{
+	struct base64_decode_ctx ctx;
+	uint8_t *result = NULL;
+	unsigned int length = strlen(src);
+	int success = -1;
+
+	*result_length = BASE64_DECODE_LENGTH(length);
+	result = (uint8_t*)malloc(*result_length);
+	if(!result) { return NULL; }
+
+	base64_decode_init(&ctx);
+
+	success = base64_decode_update(&ctx, result_length, result, length, src);
+	if(success != 1)
+	{
+		free(result);
+		return NULL;
+	}
+	success = base64_decode_final(&ctx);
+	if(success != 1)
+	{
+		free(result);
+		return NULL;
+	}
+
+	return result;
 }
