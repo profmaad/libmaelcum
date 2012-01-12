@@ -28,4 +28,6 @@ const char *MAELCUM_CLOUDFRONT_CONDITION = "\"Condition\":{%s}";
 const char *MAELCUM_CLOUDFRONT_POLICY = "{\"Statement\":[{%s,%s}]}";
 const char *MAELCUM_CLOUDFRONT_POLICY_NO_RESOURCE = "{\"Statement\":[{%s}]}";
 
+const char *MAELCUM_CLOUDFRONT_URL = "%s?Policy=%s&Signature=%s&Key-Pair-Id=%s";
+
 # endif /*MAELCUM_CLOUDFRONT_STRINGS_H*/

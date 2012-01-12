@@ -31,18 +31,9 @@ int main(int argc, char **argv)
 
 	maelcum_set_key_id(ctx, "abc123");
 
-	char *policy = maelcum_create_policy("http://d604721fxaaqy9.cloudfront.net/training/*", 1258237200, -1, "145.168.143.0/24");
-//	printf("policy: %s\n", policy);
-
-	size_t signature_size = -1;
-	uint8_t *signature = maelcum_sign(ctx, policy, strlen(policy), &signature_size);
-	char *base64_sig = maelcum_base64_encode(signature, signature_size);
-	maelcum_base64_to_url(base64_sig);
-	fwrite(base64_sig, 1, strlen(base64_sig), stdout);
-
-	free(signature);
-	free(base64_sig);
-	free(policy);
+	char *url = maelcum_create_signed_url(ctx, "http://d604721fxaaqy9.cloudfront.net/training/video.mp4", "http://d604721fxaaqy9.cloudfront.net/training/*", 1258237200, -1, "145.168.143.0/24");
+	printf("url: %s\n", url);
+	free(url);
 
 	maelcum_free(ctx);
 

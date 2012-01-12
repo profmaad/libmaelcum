@@ -449,3 +449,63 @@ uint8_t* maelcum_sign(struct maelcum_ctx *ctx, const uint8_t *data, unsigned int
 	return result;
 }
 
+char* maelcum_create_signed_url(struct maelcum_ctx *ctx, const char *base_url, const char *resource, long date_less_than, long date_greater_than, const char *ip_address)
+{
+	if(!base_url) { return NULL; }
+
+	char *result = NULL;
+	char *policy = NULL;
+	char *policy_base64 = NULL;
+	uint8_t *signature = NULL;
+	char *signature_base64 = NULL;
+	size_t signature_size = -1;
+
+	policy = maelcum_create_policy(resource, date_less_than, date_greater_than, ip_address);
+	if(!policy) { return NULL; }
+	printf("policy: %s\n", policy);
+	
+	policy_base64 = maelcum_base64_encode(policy, strlen(policy));
+	if(!policy_base64)
+	{
+		free(policy);
+		return NULL;
+	}
+	maelcum_base64_to_url(policy_base64);
+
+	signature = maelcum_sign(ctx, policy, strlen(policy), &signature_size);
+	free(policy);
+	if(!signature)
+	{
+		free(policy_base64);
+		return NULL;
+	}
+	
+	signature_base64 = maelcum_base64_encode(signature, signature_size);
+	free(signature);
+	if(!signature_base64)
+	{
+		free(policy_base64);
+		return NULL;
+	}
+	maelcum_base64_to_url(signature_base64);
+
+	size_t result_size = strlen(MAELCUM_CLOUDFRONT_URL)-8+strlen(base_url)+strlen(policy_base64)+strlen(signature_base64)+strlen(ctx->key_id)+1;
+	result = (char*)malloc(result_size);
+	if(!result)
+	{
+		free(policy_base64);
+		free(signature_base64);
+		return NULL;
+	}
+
+	int success = snprintf(result, result_size, MAELCUM_CLOUDFRONT_URL, base_url, policy_base64, signature_base64, ctx->key_id);
+	free(policy_base64);
+	free(signature_base64);
+	if(success < 0 || success >= result_size)
+	{
+		free(result);
+		return NULL;
+	}
+
+	return result;
+}
