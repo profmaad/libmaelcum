@@ -33,12 +33,19 @@ int main(int argc, char **argv)
 	printf("key id is: %s\n", maelcum_get_key_id(ctx));
 
 	char *policy = maelcum_create_policy("http://example.com/test.html", 123, 321, "127.0.0.1");
-	if(!policy)
-	{
-		printf("maelcum_create_policy failed\n");
-		return 1;
-	}
-	printf("policy: %s\n", policy);
+	printf("policy 0: %s\n", policy);
+	free(policy);
+
+	policy = maelcum_create_policy("http://example.com/test.html", 123, -1, "127.0.0.1");
+	printf("policy 1: %s\n", policy);
+	free(policy);
+
+	policy = maelcum_create_policy("http://example.com/test.html", 123, 321, NULL);
+	printf("policy 2: %s\n", policy);
+	free(policy);
+
+	policy = maelcum_create_policy(NULL, 123, 321, "127.0.0.1");
+	printf("policy 3: %s\n", policy);
 	free(policy);
 
 	maelcum_free(ctx);

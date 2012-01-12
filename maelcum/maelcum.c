@@ -243,7 +243,7 @@ char* maelcum_create_condition_dategreaterthan(long date_greater_than)
 	char *value_string = maelcum_long_to_string(date_greater_than);
 	if(value_string == NULL) { return NULL; }
 
-	char *cond = maelcum_create_condition(MAELCUM_CLOUDFRONT_COND_DATELESSTHAN, value_string);
+	char *cond = maelcum_create_condition(MAELCUM_CLOUDFRONT_COND_DATEGREATERTHAN, value_string);
 	free(value_string);
 
 	return cond;
