@@ -437,7 +437,11 @@ uint8_t* maelcum_sign(struct maelcum_ctx *ctx, const uint8_t *data, unsigned int
 	sha1_update(&sha1, length, data);
 
 	mpz_init(signature);
-	rsa_sha1_sign(&(ctx->private_key), &sha1, signature);
+	success = rsa_sha1_sign(&(ctx->private_key), &sha1, signature);
+	if(success != 1)
+	{
+		return NULL;
+	}
 
 	result = mpz_export(NULL, &result_size, 1, 1, 1, 0, signature);
 	*signature_length = result_size;

@@ -36,9 +36,9 @@ int main(int argc, char **argv)
 
 	size_t signature_size = -1;
 	uint8_t *signature = maelcum_sign(ctx, policy, strlen(policy), &signature_size);
+	fwrite(signature, 1, signature_size, stdout);
 	char *base64_sig = maelcum_base64_encode(signature, signature_size);
 	maelcum_base64_to_url(base64_sig);
-	fwrite(signature, 1, signature_size, stdout);
 
 	free(signature);
 	free(base64_sig);
