@@ -31,6 +31,14 @@ int main(int argc, char **argv)
 
 	printf("key id is: %s\n", maelcum_get_key_id(ctx));
 
+	const char *policy = maelcum_create_policy("http://example.com/test.html", 123, 321, "127.0.0.1");
+	if(!policy)
+	{
+		printf("maelcum_create_policy failed\n");
+		return 1;
+	}
+	printf("policy: %s\n", policy);
+
 	maelcum_free(ctx);
 
 	return 0;
