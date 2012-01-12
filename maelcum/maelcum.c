@@ -135,7 +135,7 @@ void maelcum_set_key_id(struct maelcum_ctx* ctx, const char *key_id)
 # if HAVE_STRDUP      
 	ctx->key_id = strdup(key_id);
 # else
-	unsigned int buffer_size = sizeof(char)*(strlen(key_id)+1);
+	size_t buffer_size = sizeof(char)*(strlen(key_id)+1);
 	ctx->key_id = (char*)malloc(buffer_size);
 	strncpy(ctx->key_id, key_id, buffer_size);
 # endif
@@ -143,4 +143,49 @@ void maelcum_set_key_id(struct maelcum_ctx* ctx, const char *key_id)
 const char* maelcum_get_key_id(struct maelcum_ctx* ctx)
 {
 	return ctx->key_id;
+}
+
+void maelcum_base64_to_url(char *str)
+{
+	char *str_ptr = str;
+
+	while(*str_ptr != 0x00)
+	{
+		switch(*str_ptr)
+		{
+		case '+':
+			*str_ptr = '-';
+			break;
+		case '=':
+			*str_ptr = '_';
+			break;
+		case '/':
+			*str_ptr = '~';
+			break;
+		}
+
+		str_ptr++;
+	}
+}
+void maelcum_url_to_base64(char *str)
+{
+	char *str_ptr = str;
+
+	while(*str_ptr != 0x00)
+	{
+		switch(*str_ptr)
+		{
+		case '-':
+			*str_ptr = '+';
+			break;
+		case '_':
+			*str_ptr = '=';
+			break;
+		case '~':
+			*str_ptr = '/';
+			break;
+		}
+
+		str_ptr++;
+	}
 }
