@@ -19,6 +19,8 @@
 # ifndef MAELCUM_H
 # define MAELCUM_H
 
+# include <nettle/nettle-types.h>
+
 struct maelcum_ctx;
 
 struct maelcum_ctx* maelcum_init(void);
@@ -30,5 +32,13 @@ void maelcum_set_key_id(struct maelcum_ctx* ctx, const char *key_id);
 const char* maelcum_get_key_id(struct maelcum_ctx* ctx);
 
 char* maelcum_create_policy(const char *resource, long date_less_than, long date_greather_than, const char *ip_address);
+
+void maelcum_base64_to_url(char *str);
+void maelcum_url_to_base64(char *str);
+
+char* maelcum_base64_encode(const uint8_t *src, unsigned int length);
+uint8_t* maelcum_base64_decode(const char *src, unsigned int *result_length);
+
+uint8_t* maelcum_sign(struct maelcum_ctx *ctx, const uint8_t *data, unsigned int length, size_t *signature_length);
 
 # endif /*MAELCUM_H*/

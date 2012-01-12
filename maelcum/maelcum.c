@@ -24,6 +24,8 @@
 # include <nettle/rsa.h>
 # include <nettle/base64.h>
 
+# include <gmp.h>
+
 # include "../config.h"
 
 # include "maelcum.h"
@@ -422,3 +424,24 @@ uint8_t* maelcum_base64_decode(const char *src, unsigned int *result_length)
 
 	return result;
 }
+
+uint8_t* maelcum_sign(struct maelcum_ctx *ctx, const uint8_t *data, unsigned int length, size_t *signature_length)
+{
+	struct sha1_ctx sha1;
+	mpz_t signature;
+	int success = -1;
+	uint8_t *result = NULL;
+	size_t result_size = -1;
+
+	sha1_init(&sha1);
+	sha1_update(&sha1, length, data);
+
+	mpz_init(signature);
+	rsa_sha1_sign(&(ctx->private_key), &sha1, signature);
+
+	result = mpz_export(NULL, &result_size, 1, 1, 1, 0, signature);
+	*signature_length = result_size;
+
+	return result;
+}
+

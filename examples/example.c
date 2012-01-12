@@ -1,5 +1,6 @@
 # include <stdio.h>
 # include <stdlib.h>
+# include <string.h>
 
 # include <maelcum/maelcum.h>
 
@@ -30,22 +31,17 @@ int main(int argc, char **argv)
 
 	maelcum_set_key_id(ctx, "abc123");
 
-	printf("key id is: %s\n", maelcum_get_key_id(ctx));
+	char *policy = maelcum_create_policy("http://d604721fxaaqy9.cloudfront.net/training/*", 1258237200, -1, "145.168.143.0/24");
+//	printf("policy: %s\n", policy);
 
-	char *policy = maelcum_create_policy("http://example.com/test.html", 123, 321, "127.0.0.1");
-	printf("policy 0: %s\n", policy);
-	free(policy);
+	size_t signature_size = -1;
+	uint8_t *signature = maelcum_sign(ctx, policy, strlen(policy), &signature_size);
+	char *base64_sig = maelcum_base64_encode(signature, signature_size);
+	maelcum_base64_to_url(base64_sig);
+	fwrite(signature, 1, signature_size, stdout);
 
-	policy = maelcum_create_policy("http://example.com/test.html", 123, -1, "127.0.0.1");
-	printf("policy 1: %s\n", policy);
-	free(policy);
-
-	policy = maelcum_create_policy("http://example.com/test.html", 123, 321, NULL);
-	printf("policy 2: %s\n", policy);
-	free(policy);
-
-	policy = maelcum_create_policy(NULL, 123, 321, "127.0.0.1");
-	printf("policy 3: %s\n", policy);
+	free(signature);
+	free(base64_sig);
 	free(policy);
 
 	maelcum_free(ctx);
