@@ -262,10 +262,10 @@ char* maelcum_string_append(char *dest, const char *src, size_t *n)
 
 	return dest+strlen(src);
 }
-char* maelcum_string_append_or_free(char *dest, char *src, size_t *n)
+char* maelcum_string_append_and_free(char *dest, char *src, size_t *n)
 {
 	char *result = maelcum_string_append(dest, src, n);
-	if(!result) { free(src); }
+	free(src);
 
 	return result;
 }
@@ -279,7 +279,7 @@ int maelcum_create_condition_string(char *dest, size_t n, long date_less_than, l
 	char *tmp = NULL;
 	size_t size_left = n;
 
-	cond_ptr = maelcum_string_append_or_free(cond_ptr, maelcum_create_condition_datelessthan(date_less_than), &size_left);
+	cond_ptr = maelcum_string_append_and_free(cond_ptr, maelcum_create_condition_datelessthan(date_less_than), &size_left);
 	if(!cond_ptr) { return -1; }
 
 	if(date_greater_than > 0)
@@ -287,7 +287,7 @@ int maelcum_create_condition_string(char *dest, size_t n, long date_less_than, l
 		cond_ptr = maelcum_string_append(cond_ptr, ",", &size_left);
 		if(!cond_ptr) { return -1; }
 
-		cond_ptr = maelcum_string_append_or_free(cond_ptr, maelcum_create_condition_dategreaterthan(date_greater_than), &size_left);
+		cond_ptr = maelcum_string_append_and_free(cond_ptr, maelcum_create_condition_dategreaterthan(date_greater_than), &size_left);
 		if(!cond_ptr) { return -1; }
 	}
 	
@@ -296,14 +296,14 @@ int maelcum_create_condition_string(char *dest, size_t n, long date_less_than, l
 		cond_ptr = maelcum_string_append(cond_ptr, ",", &size_left);
 		if(!cond_ptr) { return -1; }
 
-		cond_ptr = maelcum_string_append_or_free(cond_ptr, maelcum_create_condition_ipaddress(ip_address), &size_left);
+		cond_ptr = maelcum_string_append_and_free(cond_ptr, maelcum_create_condition_ipaddress(ip_address), &size_left);
 		if(!cond_ptr) { return -1; }
 	}
 
 	return n-size_left;
 }
 
-const char* maelcum_create_policy(const char *resource, long date_less_than, long date_greater_than, const char *ip_address)
+char* maelcum_create_policy(const char *resource, long date_less_than, long date_greater_than, const char *ip_address)
 {
 	char *resource_str = NULL;
 	char *inner_condition = NULL;
@@ -328,9 +328,9 @@ const char* maelcum_create_policy(const char *resource, long date_less_than, lon
 		return NULL;
 	}
 	bytes_written = snprintf(condition, strlen(MAELCUM_CLOUDFRONT_CONDITION)+cond_size-2+1, MAELCUM_CLOUDFRONT_CONDITION, inner_condition);
+	free(inner_condition);
 	if(bytes_written < 0 || bytes_written >= strlen(MAELCUM_CLOUDFRONT_CONDITION)+cond_size-2+1)
 	{
-		free(inner_condition);
 		free(condition);
 		return NULL;
 	}
@@ -364,11 +364,11 @@ const char* maelcum_create_policy(const char *resource, long date_less_than, lon
 	{
 		bytes_written = snprintf(policy, policy_length, MAELCUM_CLOUDFRONT_POLICY_NO_RESOURCE, condition);
 	}
+	free(condition);
+	free(resource_str);
 	
 	if(bytes_written < 0 || bytes_written >= policy_length)
 	{
-		free(condition);
-		free(resource_str);
 		free(policy);
 		
 		return NULL;

@@ -29,6 +29,6 @@ struct maelcum_ctx* ctx, const char *filename);
 void maelcum_set_key_id(struct maelcum_ctx* ctx, const char *key_id);
 const char* maelcum_get_key_id(struct maelcum_ctx* ctx);
 
-const char* maelcum_create_policy(const char *resource, long date_less_than, long date_greather_than, const char *ip_address);
+char* maelcum_create_policy(const char *resource, long date_less_than, long date_greather_than, const char *ip_address);
 
 # endif /*MAELCUM_H*/
