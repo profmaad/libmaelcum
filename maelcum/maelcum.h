@@ -22,6 +22,10 @@
 struct maelcum_ctx;
 
 struct maelcum_ctx* maelcum_init(void);
+void maelcum_free(struct maelcum_ctx* ctx);
+
 int maelcum_load_key(struct maelcum_ctx* ctx, const char *filename);
+void maelcum_set_key_id(struct maelcum_ctx* ctx, const char *key_id);
+const char* maelcum_get_key_id(struct maelcum_ctx* ctx);
 
 # endif /*MAELCUM_H*/

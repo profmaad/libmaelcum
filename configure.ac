@@ -16,7 +16,7 @@ PKG_CHECK_MODULES([NETTTLE], [nettle >= 2.4])
 PKG_CHECK_MODULES([HOGWEED], [hogweed >= 2.4])
 
 # Checks for header files.
-AC_CHECK_HEADERS([stdlib.h])
+AC_CHECK_HEADERS([stdlib.h string.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_SIZE_T
@@ -24,6 +24,7 @@ AC_TYPE_UINT8_T
 
 # Checks for library functions.
 AC_FUNC_MALLOC
+AC_CHECK_FUNCS([strdup])
 
 AC_CONFIG_FILES([Makefile
 		 maelcum/Makefile

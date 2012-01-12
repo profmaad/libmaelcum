@@ -19,6 +19,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <errno.h>
+# include <string.h>
 
 # include <nettle/rsa.h>
 
@@ -28,6 +29,7 @@ struct maelcum_ctx
 {
 	struct rsa_public_key public_key;
 	struct rsa_private_key private_key;
+	char *key_id;
 };
 
 struct maelcum_ctx* maelcum_init(void)
@@ -37,8 +39,18 @@ struct maelcum_ctx* maelcum_init(void)
 
 	rsa_public_key_init(&(ctx->public_key));
 	rsa_private_key_init(&(ctx->private_key));
+	ctx->key_id = NULL;
 
 	return ctx;
+}
+void maelcum_free(struct maelcum_ctx* ctx)
+{
+	rsa_public_key_clear(&(ctx->public_key));
+	rsa_private_key_clear(&(ctx->private_key));
+
+	if(ctx->key_id) { free(ctx->key_id); }
+
+	free(ctx);
 }
 
 long maelcum_get_file_size(FILE *file, int *error)
@@ -107,10 +119,20 @@ int maelcum_load_key(struct maelcum_ctx* ctx, const char *filename)
 	}
 
 	error = rsa_keypair_from_sexp(&(ctx->public_key), &(ctx->private_key), 0, buffer_size, buffer);
+	free(buffer);
 	if(error != 1)
 	{
 		return -1;
 	}
 
 	return 0;
+}
+
+void maelcum_set_key_id(struct maelcum_ctx* ctx, const char *key_id)
+{
+	ctx->key_id = strdup(key_id);
+}
+const char* maelcum_get_key_id(struct maelcum_ctx* ctx)
+{
+	return ctx->key_id;
 }

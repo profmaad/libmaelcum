@@ -27,5 +27,11 @@ int main(int argc, char **argv)
 		return success;
 	}
 
+	maelcum_set_key_id(ctx, "abc123");
+
+	printf("key id is: %s\n", maelcum_get_key_id(ctx));
+
+	maelcum_free(ctx);
+
 	return 0;
 }
