@@ -23,6 +23,8 @@
 
 # include <nettle/rsa.h>
 
+# include "../config.h"
+
 # include "maelcum.h"
 
 struct maelcum_ctx
@@ -130,7 +132,13 @@ int maelcum_load_key(struct maelcum_ctx* ctx, const char *filename)
 
 void maelcum_set_key_id(struct maelcum_ctx* ctx, const char *key_id)
 {
+# if HAVE_STRDUP      
 	ctx->key_id = strdup(key_id);
+# else
+	unsigned int buffer_size = sizeof(char)*(strlen(key_id)+1);
+	ctx->key_id = (char*)malloc(buffer_size);
+	strncpy(ctx->key_id, key_id, buffer_size);
+# endif
 }
 const char* maelcum_get_key_id(struct maelcum_ctx* ctx)
 {
