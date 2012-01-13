@@ -1,5 +1,5 @@
 AC_PREREQ([2.68])
-AC_INIT([libmaelcum], [0.0], [himself@prof-maad.org])
+AC_INIT([libmaelcum], [1.0], [himself@prof-maad.org])
 AM_INIT_AUTOMAKE([-Wall -Werror])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
