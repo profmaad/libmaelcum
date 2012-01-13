@@ -1,4 +1,4 @@
-bin_PROGRAMS = example
+noinst_PROGRAMS = example
 
 AM_CFLAGS = -I../
 
