@@ -10,6 +10,8 @@ It uses libnettle for its crypto and uses RSA keys in nettle's S-Expression form
 
  * autotools
  * libnettle (>= 2.4, although earlier versions might work)
+ * libhogweed (>= 2.4, part of nettle)
+ * libgmp
 
 ## Build
 
