@@ -28,6 +28,7 @@ AC_CHECK_FUNCS([strdup])
 
 AC_CONFIG_FILES([Makefile
 		 maelcum/Makefile
-		 examples/Makefile])
+		 examples/Makefile
+		 libmaelcum.pc])
 
 AC_OUTPUT
